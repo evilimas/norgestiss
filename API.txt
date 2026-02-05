@@ -1,0 +1,26 @@
+READ
+
+{
+  "id": 42,
+  "name": "WC bla bla bla",
+  "latitude": 60.3921,
+  "longitude": 5.3249,
+  "isFree": false,
+  "hasHandicapAccess": false,
+  "description": "Paid, payment by card",
+  "addedByUserId": "user_123",
+  "addedAt": "2026-02-05T09:18:44Z"
+}
+
+
+
+CREATE
+
+{
+  "name": "WC bla bla bla",
+  "latitude": 60.3921,
+  "longitude": 5.3249,
+  "isFree": false,
+  "hasHandicapAccess": false,
+  "description": "Paid, payment by card"
+}
