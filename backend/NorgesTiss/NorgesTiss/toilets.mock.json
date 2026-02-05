@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "name": "Oslo Central Station WC",
+    "latitude": 59.911491,
+    "longitude": 10.757933,
+    "isFree": false,
+    "hasHandicapAccess": true,
+    "description": "Paid public toilet located inside Oslo Central Station. Accepts card payments. Clean and well maintained.",
+    "addedByUserId": "seed",
+    "addedAt": "2026-02-01T10:00:00Z"
+  },
+  {
+    "id": 2,
+    "name": "Bryggen Public Toilet",
+    "latitude": 60.397076,
+    "longitude": 5.324383,
+    "isFree": true,
+    "hasHandicapAccess": false,
+    "description": "Free public toilet near the Bryggen area. Very busy during tourist season. May be closed at night.",
+    "addedByUserId": "seed",
+    "addedAt": "2026-02-01T10:05:00Z"
+  },
+  {
+    "id": 3,
+    "name": "Stavanger City Park WC",
+    "latitude": 58.969975,
+    "longitude": 5.733107,
+    "isFree": true,
+    "hasHandicapAccess": true,
+    "description": "Free public toilet located in the city park. Accessible for wheelchair users. Usually clean.",
+    "addedByUserId": "seed",
+    "addedAt": "2026-02-01T10:10:00Z"
+  },
+  {
+    "id": 4,
+    "name": "Trondheim Torvet Toilet",
+    "latitude": 63.430515,
+    "longitude": 10.395053,
+    "isFree": false,
+    "hasHandicapAccess": true,
+    "description": "Paid toilet near Torvet square. Modern facilities with automatic cleaning system.",
+    "addedByUserId": "seed",
+    "addedAt": "2026-02-01T10:15:00Z"
+  },
+  {
+    "id": 5,
+    "name": "Tromsø Harbour Public WC",
+    "latitude": 69.649205,
+    "longitude": 18.955324,
+    "isFree": true,
+    "hasHandicapAccess": false,
+    "description": "Free public toilet near the harbour. Basic facilities. Can be closed during winter nights.",
+    "addedByUserId": "seed",
+    "addedAt": "2026-02-01T10:20:00Z"
+  }
+]
