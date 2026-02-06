@@ -1,107 +1,93 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
 
 export default function HomeScreen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#ffffff', dark: '#015670' }}
-      headerImage={
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.scrollContent}
+    >
+      <ThemedView style={styles.headerContainer}>
         <Image
-          source={require('@/assets/images/logo.png')}
+          source={require('@/assets/images/logo2.png')}
           style={styles.logo}
         />
-      }
-    >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome To Norgestiss!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{' '}
-          to see changes. Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
+        <ThemedText type="title" style={styles.title}>
+          Welcome To Norgestiss!
+        </ThemedText>
+        <ThemedText style={styles.subtitle}>
+          Find public toilets across Norway
         </ThemedText>
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction
-              title="Action"
-              icon="cube"
-              onPress={() => alert('Action pressed')}
-            />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
+      <ThemedView style={styles.contentContainer}>
+        <ThemedView style={styles.featureContainer}>
+          <ThemedText type="subtitle">🚻 Find Nearby Toilets</ThemedText>
+          <ThemedText>
+            Locate public toilets in your area with real-time information about
+            availability, accessibility, and payment options.
+          </ThemedText>
+        </ThemedView>
+
+        <ThemedView style={styles.featureContainer}>
+          <ThemedText type="subtitle">♿ Accessibility Info</ThemedText>
+          <ThemedText>
+            Get detailed information about handicap accessibility, helping
+            everyone find suitable facilities.
+          </ThemedText>
+        </ThemedView>
+
+        <ThemedView style={styles.featureContainer}>
+          <ThemedText type="subtitle">💳 Payment Details</ThemedText>
+          <ThemedText>
+            Know in advance whether facilities are free or require payment, and
+            what payment methods are accepted.
+          </ThemedText>
+        </ThemedView>
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">
-            npm run reset-project
-          </ThemedText>{' '}
-          to get a fresh <ThemedText type="defaultSemiBold">app</ThemedText>{' '}
-          directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: {
+    flex: 1,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 1,
+  scrollContent: {
+    flexGrow: 1,
+  },
+  headerContainer: {
+    alignItems: 'center',
+    paddingVertical: 32,
+    paddingHorizontal: 16,
   },
   logo: {
-    height: 288,
-    width: 550,
-    bottom: 1,
-    left: 1,
-    // position: 'absolute',
+    width: '100%',
+    height: 220,
+    marginBottom: 16,
+    resizeMode: 'contain',
+  },
+  title: {
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  subtitle: {
+    textAlign: 'center',
+    opacity: 0.8,
+  },
+  contentContainer: {
+    flex: 1,
+    paddingHorizontal: 16,
+    paddingBottom: 32,
+  },
+  featureContainer: {
+    marginBottom: 24,
+    padding: 16,
+    borderRadius: 12,
+    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    gap: 8,
   },
 });
