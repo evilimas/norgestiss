@@ -179,6 +179,7 @@ export default function MapScreen() {
             title={toilet.name}
             description={`${toilet.isFree ? '🆓 Free' : '💵 Paid'} ${toilet.hasHandicapAccess ? '♿ Accessible' : ''}`}
             pinColor={toilet.isFree ? 'green' : 'red'}
+
           />
         ))}
       </MapView>
