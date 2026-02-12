@@ -35,3 +35,6 @@ coverage
 **/appsettings.Development.json
 backend/NorgesTiss/NorgesTiss/appsettings.Development.json
 backend/NorgesTiss/NorgesTiss/norgestiss.db
+/backend/NorgesTiss/NorgesTiss/Migrations
+backend/NorgesTiss/NorgesTiss/norgestiss.db-shm
+backend/NorgesTiss/NorgesTiss/norgestiss.db-wal
