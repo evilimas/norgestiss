@@ -1,11 +1,11 @@
-﻿namespace NorgesTiss;
-
+﻿
 public class PublicToiletDto
 {
     public int Id { get; set; }
     public string Name { get; set; }
     public double Latitude { get; set; }
     public double Longitude { get; set; }
+    public string Adress { get; set; }
     public bool IsFree { get; set; }
     public bool HasHandicapAccess { get; set; }
     public string Description { get; set; }

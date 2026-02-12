@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NorgesTiss;
 using NorgesTiss.Properties;
+
+namespace NorgesTiss.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ToiletsController : ControllerBase
+public class MockToiletsController : ControllerBase
 {
     // GET /api/toilets
     [HttpGet]
