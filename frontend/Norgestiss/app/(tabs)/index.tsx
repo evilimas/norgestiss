@@ -16,7 +16,7 @@ export default function HomeScreen() {
           style={styles.logo}
         />
         <ThemedText type="title" style={styles.title}>
-          Welcome To Norgestiss!
+          Welcome To Norgestiss!!
         </ThemedText>
         <ThemedText style={styles.subtitle}>
           Find public toilets across Norway

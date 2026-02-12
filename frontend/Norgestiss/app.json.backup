@@ -23,11 +23,13 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "permissions": [
-        "ACCESS_FINE_LOCATION",
-        "ACCESS_COARSE_LOCATION"
-      ],
-      "package": "com.esuegyda.Norgestiss"
+      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"],
+      "package": "com.esuegyda.Norgestiss",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDummy_Key_Replace_With_Real_Key"
+        }
+      }
     },
     "web": {
       "output": "static",
@@ -46,7 +48,8 @@
             "backgroundColor": "#000000"
           }
         }
-      ]
+      ],
+      "expo-location"
     ],
     "experiments": {
       "typedRoutes": true,

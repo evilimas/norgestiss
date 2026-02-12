@@ -1,14 +1,10 @@
-import { StyleSheet, Platform, Alert, Pressable } from 'react-native';
-import { useEffect, useState } from 'react';
+import { StyleSheet, Pressable, Alert } from 'react-native';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { WebView } from 'react-native-webview';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { getAllToilets } from '@/services/toiletServices';
 import * as Location from 'expo-location';
-
-// Dynamic imports for react-native-maps (mobile only)
-let MapView: any;
-let Marker: any;
-let PROVIDER_GOOGLE: any;
 
 type Toilet = {
   id: number;
@@ -20,25 +16,12 @@ type Toilet = {
   description: string;
 };
 
-// Only import maps on mobile platforms
-if (Platform.OS !== 'web') {
-  try {
-    const maps = require('react-native-maps');
-    MapView = maps.default;
-    Marker = maps.Marker;
-    PROVIDER_GOOGLE = maps.PROVIDER_GOOGLE;
-  } catch (e) {
-    console.log('Maps not available');
-  }
-}
-
 export default function MapScreen() {
   const [toilets, setToilets] = useState<Toilet[]>([]);
-  const [userLocation, setUserLocation] = useState<{
-    latitude: number;
-    longitude: number;
-  } | null>(null);
-  const [mapRef, setMapRef] = useState<any>(null);
+  const [userLocation, setUserLocation] = useState<[number, number]>([
+    10.7522, 59.9139,
+  ]);
+  const webViewRef = useRef<WebView>(null);
 
   useEffect(() => {
     const fetchToilets = async () => {
@@ -49,11 +32,8 @@ export default function MapScreen() {
         console.error('Error fetching toilets:', error);
       }
     };
-    fetchToilets();
-  }, []);
 
-  useEffect(() => {
-    getCurrentLocation();
+    fetchToilets();
   }, []);
 
   const getCurrentLocation = async () => {
@@ -71,127 +51,97 @@ export default function MapScreen() {
         accuracy: Location.Accuracy.Balanced,
       });
 
-      const userCoords = {
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      };
-
-      setUserLocation(userCoords);
-
-      // Center map on user location
-      if (mapRef) {
-        mapRef.animateToRegion(
-          {
-            ...userCoords,
-            latitudeDelta: 0.05,
-            longitudeDelta: 0.05,
-          },
-          1000,
-        );
-      }
+      setUserLocation([location.coords.longitude, location.coords.latitude]);
     } catch (error) {
       console.error('Error getting location:', error);
-      Alert.alert(
-        'Error',
-        'Could not get your current location. Please make sure location services are enabled.',
-      );
     }
   };
 
-  const centerOnUser = () => {
-    if (userLocation && mapRef) {
-      mapRef.animateToRegion(
-        {
-          ...userLocation,
-          latitudeDelta: 0.05,
-          longitudeDelta: 0.05,
-        },
-        1000,
-      );
-    } else {
-      getCurrentLocation();
-    }
-  };
+  const mapHtml = useMemo(() => {
+    const toiletsJson = JSON.stringify(toilets);
+    const userLocationJson = JSON.stringify(userLocation);
 
-  // Web: Show simple message
-  // if (Platform.OS === 'web') {
-  //   return (
-  //     <ThemedView style={styles.container}>
-  //       <ThemedView style={styles.webContainer}>
-  //         <ThemedText type="title">🗺️ Map</ThemedText>
-  //         <ThemedText>Maps are available on mobile devices</ThemedText>
-  //         {toilets.map((toilet) => (
-  //           <ThemedView key={toilet.id} style={styles.toiletCard}>
-  //             <ThemedText style={styles.toiletName}>{toilet.name}</ThemedText>
-  //             <ThemedText>
-  //               {toilet.isFree ? '🆓 Free' : '💵 Paid'}
-  //               {toilet.hasHandicapAccess ? ' ♿ Accessible' : ''}
-  //             </ThemedText>
-  //           </ThemedView>
-  //         ))}
-  //       </ThemedView>
-  //     </ThemedView>
-  //   );
-  // }
+    return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    html, body, #map { height: 100%; margin: 0; padding: 0; }
+    .leaflet-container { font-family: -apple-system, Roboto, sans-serif; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const toilets = ${toiletsJson};
+    const userLocation = ${userLocationJson};
 
-  // Mobile: Show map or error
-  if (!MapView) {
-    return (
-      <ThemedView style={styles.container}>
-        <ThemedView style={styles.webContainer}>
-          <ThemedText type="title">Map Unavailable</ThemedText>
-          <ThemedText>Please install map dependencies</ThemedText>
-        </ThemedView>
-      </ThemedView>
-    );
-  }
+    const map = L.map('map').setView([userLocation[1], userLocation[0]], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    const userIcon = L.divIcon({
+      html: '<div style="width:16px;height:16px;border-radius:8px;background:#3b82f6;border:2px solid white;"></div>',
+      className: '',
+      iconSize: [16, 16],
+      iconAnchor: [8, 8]
+    });
+
+    L.marker([userLocation[1], userLocation[0]], { icon: userIcon })
+      .addTo(map)
+      .bindPopup('Your location');
+
+    toilets.forEach((toilet) => {
+      const markerColor = toilet.isFree ? '#22c55e' : '#ef4444';
+      const toiletIcon = L.divIcon({
+        html: '<div style="width:18px;height:18px;border-radius:9px;background:' + markerColor + ';border:2px solid white;"></div>',
+        className: '',
+        iconSize: [18, 18],
+        iconAnchor: [9, 9]
+      });
+
+      const detail = (toilet.isFree ? 'Free' : 'Paid') +
+        (toilet.hasHandicapAccess ? ' • Accessible' : '');
+
+      L.marker([toilet.latitude, toilet.longitude], { icon: toiletIcon })
+        .addTo(map)
+        .bindPopup('<b>' + toilet.name + '</b><br/>' + detail + '<br/><br/>' + toilet.description);
+    });
+
+    window.centerToUser = function(lon, lat) {
+      map.setView([lat, lon], 15);
+    };
+  </script>
+</body>
+</html>`;
+  }, [toilets, userLocation]);
 
   return (
     <ThemedView style={styles.container}>
-      <MapView
-        ref={setMapRef}
-        style={styles.map}
-        provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : undefined}
-        initialRegion={
-          userLocation
-            ? {
-                ...userLocation,
-                latitudeDelta: 0.05,
-                longitudeDelta: 0.05,
-              }
-            : {
-                latitude: 59.9139, // Oslo center
-                longitude: 10.7522,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-              }
-        }
-        showsUserLocation={true}
-        showsMyLocationButton={false} // We'll use our own button
+      <WebView ref={webViewRef} style={styles.map} source={{ html: mapHtml }} />
+
+      <Pressable
+        style={styles.locationButton}
+        onPress={async () => {
+          await getCurrentLocation();
+          webViewRef.current?.injectJavaScript(
+            `window.centerToUser(${userLocation[0]}, ${userLocation[1]}); true;`,
+          );
+        }}
       >
-        {toilets.map((toilet) => (
-          <Marker
-            key={toilet.id}
-            coordinate={{
-              latitude: toilet.latitude,
-              longitude: toilet.longitude,
-            }}
-            title={toilet.name}
-            description={`${toilet.isFree ? '🆓 Free' : '💵 Paid'} ${toilet.hasHandicapAccess ? '♿ Accessible' : ''}`}
-            pinColor={toilet.isFree ? 'green' : 'red'}
-
-          />
-        ))}
-      </MapView>
-
-      {/* Location button */}
-      <Pressable style={styles.locationButton} onPress={centerOnUser}>
         <ThemedText style={styles.locationButtonText}>📍</ThemedText>
       </Pressable>
 
       <ThemedView style={styles.overlay}>
         <ThemedText style={styles.legend}>
-          🟢 Free • 🔴 Paid • 💙 Your Location
+          🟢 Free • 🔴 Paid • 🔵 You
         </ThemedText>
       </ThemedView>
     </ThemedView>
@@ -205,22 +155,6 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
-  webContainer: {
-    flex: 1,
-    padding: 20,
-    alignItems: 'center',
-    gap: 16,
-  },
-  toiletCard: {
-    padding: 12,
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
-    borderRadius: 8,
-    width: '100%',
-  },
-  toiletName: {
-    fontWeight: 'bold',
-    marginBottom: 4,
-  },
   locationButton: {
     position: 'absolute',
     top: 50,
@@ -232,10 +166,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
@@ -248,7 +179,7 @@ const styles = StyleSheet.create({
     bottom: 20,
     left: 20,
     right: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     padding: 10,
     borderRadius: 8,
     alignItems: 'center',
