@@ -11,6 +11,7 @@ type Toilet = {
   name: string;
   latitude: number;
   longitude: number;
+  adress: string;
   isFree: boolean;
   hasHandicapAccess: boolean;
   description: string;
@@ -61,7 +62,7 @@ export default function MapScreen() {
     const toiletsJson = JSON.stringify(toilets);
     const userLocationJson = JSON.stringify(userLocation);
 
-    return `
+    return /*HTML*/ `
 <!DOCTYPE html>
 <html>
 <head>
@@ -107,12 +108,12 @@ export default function MapScreen() {
         iconAnchor: [9, 9]
       });
 
-      const detail = (toilet.isFree ? 'Free' : 'Paid') +
-        (toilet.hasHandicapAccess ? ' • Accessible' : '');
+      const detail = (toilet.isFree ? ' 🆓 Free' : '💵 Paid') +
+        (toilet.hasHandicapAccess ? ' • ♿ Accessible' : ' • ♿ Not Accessible');
 
       L.marker([toilet.latitude, toilet.longitude], { icon: toiletIcon })
         .addTo(map)
-        .bindPopup('<b>' + toilet.name + '</b><br/>' + detail + '<br/><br/>' + toilet.description);
+        .bindPopup('<b>' + toilet.name + '</b><br/><br/>' + detail + '<br/><br/>' + 'Adress: ' + toilet.adress + '<br/><br/>' + toilet.description);
     });
 
     window.centerToUser = function(lon, lat) {
