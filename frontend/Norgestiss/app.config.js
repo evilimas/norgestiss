@@ -18,9 +18,7 @@ export default {
     android: {
       adaptiveIcon: {
         backgroundColor: '#E6F4FE',
-        foregroundImage: './assets/images/android-icon-foreground.png',
-        backgroundImage: './assets/images/android-icon-background.png',
-        monochromeImage: './assets/images/android-icon-monochrome.png',
+        foregroundImage: './assets/images/icon.png',
       },
       edgeToEdgeEnabled: true,
       predictiveBackGestureEnabled: false,
@@ -30,7 +28,7 @@ export default {
     },
     web: {
       output: 'static',
-      favicon: './assets/images/favicon.png',
+      favicon: './assets/images/icon.png',
     },
     plugins: [
       'expo-router',
