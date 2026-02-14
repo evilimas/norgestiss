@@ -19,6 +19,8 @@ type Toilet = {
 
 export default function MapScreen() {
   const [toilets, setToilets] = useState<Toilet[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [userLocation, setUserLocation] = useState<[number, number]>([
     10.7522, 59.9139,
   ]);
@@ -27,10 +29,16 @@ export default function MapScreen() {
   useEffect(() => {
     const fetchToilets = async () => {
       try {
+        setLoadError(null);
         const toiletData = await getAllToilets();
         setToilets(toiletData);
       } catch (error) {
         console.error('Error fetching toilets:', error);
+        setLoadError(
+          error instanceof Error ? error.message : 'Failed to load toilets',
+        );
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -100,6 +108,13 @@ export default function MapScreen() {
       .bindPopup('Your location');
 
     toilets.forEach((toilet) => {
+      const latitude = Number(toilet.latitude);
+      const longitude = Number(toilet.longitude);
+
+      if (Number.isNaN(latitude) || Number.isNaN(longitude)) {
+        return;
+      }
+
       const markerColor = toilet.isFree ? '#22c55e' : '#ef4444';
       const toiletIcon = L.divIcon({
         html: '<div style="width:18px;height:18px;border-radius:9px;background:' + markerColor + ';border:2px solid white;"></div>',
@@ -111,7 +126,7 @@ export default function MapScreen() {
       const detail = (toilet.isFree ? ' 🆓 Free' : '💵 Paid') +
         (toilet.hasHandicapAccess ? ' • ♿ Accessible' : ' • ♿ Not Accessible');
 
-      L.marker([toilet.latitude, toilet.longitude], { icon: toiletIcon })
+      L.marker([latitude, longitude], { icon: toiletIcon })
         .addTo(map)
         .bindPopup('<b>' + toilet.name + '</b><br/><br/>' + detail + '<br/><br/>' + 'Adress: ' + toilet.adress + '<br/><br/>' + toilet.description);
     });
@@ -143,6 +158,13 @@ export default function MapScreen() {
       <ThemedView style={styles.overlay}>
         <ThemedText style={styles.legend}>
           🟢 Free • 🔴 Paid • 🔵 You
+        </ThemedText>
+        <ThemedText>
+          {isLoading
+            ? 'Loading toilets...'
+            : loadError
+              ? `API error: ${loadError}`
+              : `Toilets loaded: ${toilets.length}`}
         </ThemedText>
       </ThemedView>
     </ThemedView>

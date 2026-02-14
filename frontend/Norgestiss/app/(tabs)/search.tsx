@@ -1,8 +1,79 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TextInput } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { getAllToilets } from '@/services/toiletServices';
+import { useEffect, useState } from 'react';
+
+type Toilet = {
+  id: number;
+  name: string;
+  latitude: number;
+  longitude: number;
+  adress: string;
+  isFree: boolean;
+  hasHandicapAccess: boolean;
+  description: string;
+};
+
+type ToiletFilter = {
+  name?: string;
+  adress?: string;
+  isFree?: boolean;
+  hasHandicapAccess?: boolean;
+  search?: string;
+};
 
 export default function SearchScreen() {
+  const [toilets, setToilets] = useState<Toilet[]>([]);
+  const [filteredToilets, setFilteredToilets] = useState<Toilet[]>([]);
+  const [filters, setFilters] = useState<ToiletFilter>({});
+
+  useEffect(() => {
+    getAllToilets().then(setToilets);
+  }, []);
+
+  useEffect(() => {
+    function filterToilets(
+      allToilets: Toilet[],
+      filters: ToiletFilter,
+    ): Toilet[] {
+      let result = allToilets;
+
+      if (filters.name) {
+        result = result.filter((toilet) => toilet.name === filters.name);
+      }
+
+      if (filters.adress) {
+        if (filters.name && filters.adress) {
+          result = result.filter((toilet) => toilet.name === filters.name);
+        }
+        result = result.filter((toilet) => toilet.adress === filters.adress);
+      }
+
+      if (filters.search) {
+        result = result.filter(
+          (toilet) =>
+            toilet.name
+              .toLocaleLowerCase()
+              .includes(filters.search?.toLocaleLowerCase() || '') ||
+            toilet.adress
+              .toLocaleLowerCase()
+              .includes(filters.search?.toLocaleLowerCase() || '') ||
+            toilet.description
+              .toLocaleLowerCase()
+              .includes(filters.search?.toLocaleLowerCase() || ''),
+        );
+      }
+
+      return result;
+    }
+
+    if (toilets) {
+      const filtered = filterToilets(toilets, filters);
+      setFilteredToilets(filtered);
+    }
+  }, [filters, toilets]);
+
   return (
     <ThemedView style={styles.container}>
       <ThemedView style={styles.titleContainer}>
@@ -14,14 +85,30 @@ export default function SearchScreen() {
           other criteria.
         </ThemedText>
         <ThemedView style={styles.searchContainer}>
-          <ThemedText type="subtitle">Search Features:</ThemedText>
-          <ThemedText>• Location-based search</ThemedText>
-          <ThemedText>• Filter by accessibility</ThemedText>
-          <ThemedText>• Filter by payment type</ThemedText>
-          <ThemedText>• Distance from current location</ThemedText>
+          <TextInput
+            style={styles.textInput}
+            placeholder="Search for toilet"
+            onChangeText={(text) =>
+              setFilters((prev) => ({ ...prev, search: text }))
+            }
+            value={filters.search || ''}
+          />
         </ThemedView>
         <ThemedText style={styles.placeholder}>
-          Search functionality coming soon...
+          {filteredToilets.map((toilet) => (
+            <ThemedText style={styles.toilet} key={toilet.id}>
+              {toilet.name} - {toilet.adress}
+              {' | '}
+              {toilet.isFree ? '🆓 Free' : '💵 Paid'}
+              {' | '}
+              {toilet.hasHandicapAccess
+                ? 'Handicap Accessible♿'
+                : 'Not Handicap Accessible'}{' '}
+            </ThemedText>
+          ))}
+          {filteredToilets.length === 0
+            ? 'No toilets found. Try adjusting your search criteria.'
+            : `Found ${filteredToilets.length} toilets.`}
         </ThemedText>
       </ThemedView>
     </ThemedView>
@@ -52,5 +139,19 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     opacity: 0.6,
     fontStyle: 'italic',
+  },
+  textInput: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+  },
+  toilet: {
+    display: 'flex',
+    paddingVertical: 4,
+
+    borderBottomColor: 'rgba(0, 0, 0, 0.1)',
+    borderBottomWidth: 1,
   },
 });

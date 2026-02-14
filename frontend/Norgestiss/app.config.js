@@ -20,6 +20,7 @@ export default {
         backgroundColor: '#E6F4FE',
         foregroundImage: './assets/images/icon.png',
       },
+      usesCleartextTraffic: true,
       edgeToEdgeEnabled: true,
       predictiveBackGestureEnabled: false,
       permissions: ['ACCESS_FINE_LOCATION', 'ACCESS_COARSE_LOCATION'],
