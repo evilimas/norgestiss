@@ -84,7 +84,15 @@ export default function SearchScreen() {
           🔍 Search for public toilets by location, accessibility features, or
           other criteria.
         </ThemedText>
+
         <ThemedView style={styles.searchContainer}>
+          {/* <RadioInput
+            label="Free Toilets"
+            value={filters.isFree === true}
+            onChange={(value) =>
+              setFilters((prev) => ({ ...prev, isFree: value }))
+            }
+          /> */}
           <TextInput
             style={styles.textInput}
             placeholder="Search for toilet"
