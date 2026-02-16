@@ -86,13 +86,7 @@ export default function SearchScreen() {
         </ThemedText>
 
         <ThemedView style={styles.searchContainer}>
-          {/* <RadioInput
-            label="Free Toilets"
-            value={filters.isFree === true}
-            onChange={(value) =>
-              setFilters((prev) => ({ ...prev, isFree: value }))
-            }
-          /> */}
+          {/* {input for selecting filters like free/paid, handicap access, etc. can be added here in the future} */}
           <TextInput
             style={styles.textInput}
             placeholder="Search for toilet"
