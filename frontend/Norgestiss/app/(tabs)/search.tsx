@@ -86,7 +86,7 @@ export default function SearchScreen() {
         </ThemedText>
 
         <ThemedView style={styles.searchContainer}>
-          {/* {input for selecting filters like free/paid, handicap access, etc. can be added here in the future} */}
+          {/* {input for selecting filters like free/paid, handicap access} */}
           <TextInput
             style={styles.textInput}
             placeholder="Search for toilet"
