@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput } from 'react-native';
+import { StyleSheet, TextInput, Text } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { getAllToilets } from '@/services/toiletServices';
@@ -96,11 +96,14 @@ export default function SearchScreen() {
             value={filters.search || ''}
           />
         </ThemedView>
-        <ThemedText style={styles.placeholder}>
+        <ThemedView style={styles.toiletList}>
           {filteredToilets.map((toilet) => (
             <ThemedText style={styles.toilet} key={toilet.id}>
-              {toilet.name} - {toilet.adress}
-              {' | '}
+              <Text style={{ fontWeight: 'bold' }}>{toilet.name}</Text>
+              <Text style={{ fontStyle: 'italic' }}>
+                Adress: {toilet.adress}
+              </Text>
+              <Text>{toilet.description}</Text>
               {toilet.isFree ? '🆓 Free' : '💵 Paid'}
               {' | '}
               {toilet.hasHandicapAccess
@@ -108,6 +111,8 @@ export default function SearchScreen() {
                 : 'Not Handicap Accessible'}{' '}
             </ThemedText>
           ))}
+        </ThemedView>
+        <ThemedText style={styles.toiletLength}>
           {filteredToilets.length === 0
             ? 'No toilets found. Try adjusting your search criteria.'
             : `Found ${filteredToilets.length} toilets.`}
@@ -151,9 +156,21 @@ const styles = StyleSheet.create({
   },
   toilet: {
     display: 'flex',
-    paddingVertical: 4,
+    flexDirection: 'column',
+    paddingVertical: 6,
 
     borderBottomColor: 'rgba(0, 0, 0, 0.1)',
     borderBottomWidth: 1,
+  },
+  toiletList: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+    gap: 8,
+  },
+  toiletLength: {
+    marginTop: 'auto',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
