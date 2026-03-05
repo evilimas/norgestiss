@@ -3,6 +3,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { getAllToilets } from '@/services/toiletServices';
 import { useEffect, useState } from 'react';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 type Toilet = {
   id: number;
@@ -30,7 +31,7 @@ export default function SearchScreen() {
 
   useEffect(() => {
     getAllToilets().then(setToilets);
-  }, []);
+  }, [getAllToilets]);
 
   useEffect(() => {
     function filterToilets(
