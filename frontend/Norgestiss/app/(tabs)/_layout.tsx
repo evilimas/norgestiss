@@ -45,6 +45,15 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="addToilet"
+        options={{
+          title: 'Add Toilet',
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="plus.circle.fill" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="favorites"
         options={{
           title: 'Favorites',
