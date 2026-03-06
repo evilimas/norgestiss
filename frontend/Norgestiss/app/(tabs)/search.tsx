@@ -1,9 +1,8 @@
-import { StyleSheet, TextInput, Text } from 'react-native';
+import { StyleSheet, TextInput, Text, ScrollView } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { getAllToilets } from '@/services/toiletServices';
 import { useEffect, useState } from 'react';
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 type Toilet = {
   id: number;
@@ -77,48 +76,50 @@ export default function SearchScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Search Toilets</ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.contentContainer}>
-        <ThemedText>
-          🔍 Search for public toilets by location, accessibility features, or
-          other criteria.
-        </ThemedText>
+      <ScrollView>
+        <ThemedView style={styles.titleContainer}>
+          <ThemedText type="title">Search Toilets</ThemedText>
+        </ThemedView>
+        <ThemedView style={styles.contentContainer}>
+          <ThemedText>
+            🔍 Search for public toilets by location, accessibility features, or
+            other criteria.
+          </ThemedText>
 
-        <ThemedView style={styles.searchContainer}>
-          {/* {input for selecting filters like free / paid, handicap access} */}
-          <TextInput
-            style={styles.textInput}
-            placeholder="Search for toilet"
-            onChangeText={(text) =>
-              setFilters((prev) => ({ ...prev, search: text }))
-            }
-            value={filters.search || ''}
-          />
+          <ThemedView style={styles.searchContainer}>
+            {/* {input for selecting filters like free / paid, handicap access} */}
+            <TextInput
+              style={styles.textInput}
+              placeholder="Search for toilet"
+              onChangeText={(text) =>
+                setFilters((prev) => ({ ...prev, search: text }))
+              }
+              value={filters.search || ''}
+            />
+          </ThemedView>
+          <ThemedView style={styles.toiletList}>
+            {filteredToilets.map((toilet) => (
+              <ThemedText style={styles.toilet} key={toilet.id}>
+                <Text style={{ fontWeight: 'bold' }}>{toilet.name}</Text>
+                <Text style={{ fontStyle: 'italic' }}>
+                  Adress: {toilet.adress}
+                </Text>
+                <Text>{toilet.description}</Text>
+                {toilet.isFree ? '🆓 Free' : '💵 Paid'}
+                {' | '}
+                {toilet.hasHandicapAccess
+                  ? 'Handicap Accessible♿'
+                  : 'Not Handicap Accessible'}{' '}
+              </ThemedText>
+            ))}
+          </ThemedView>
+          <ThemedText style={styles.toiletLength}>
+            {filteredToilets.length === 0
+              ? 'No toilets found. Try adjusting your search criteria.'
+              : `Found ${filteredToilets.length} toilets.`}
+          </ThemedText>
         </ThemedView>
-        <ThemedView style={styles.toiletList}>
-          {filteredToilets.map((toilet) => (
-            <ThemedText style={styles.toilet} key={toilet.id}>
-              <Text style={{ fontWeight: 'bold' }}>{toilet.name}</Text>
-              <Text style={{ fontStyle: 'italic' }}>
-                Adress: {toilet.adress}
-              </Text>
-              <Text>{toilet.description}</Text>
-              {toilet.isFree ? '🆓 Free' : '💵 Paid'}
-              {' | '}
-              {toilet.hasHandicapAccess
-                ? 'Handicap Accessible♿'
-                : 'Not Handicap Accessible'}{' '}
-            </ThemedText>
-          ))}
-        </ThemedView>
-        <ThemedText style={styles.toiletLength}>
-          {filteredToilets.length === 0
-            ? 'No toilets found. Try adjusting your search criteria.'
-            : `Found ${filteredToilets.length} toilets.`}
-        </ThemedText>
-      </ThemedView>
+      </ScrollView>
     </ThemedView>
   );
 }
