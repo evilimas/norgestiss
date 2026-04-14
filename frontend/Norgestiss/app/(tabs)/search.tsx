@@ -88,6 +88,25 @@ export default function SearchScreen() {
 
           <ThemedView style={styles.searchContainer}>
             {/* input for selecting filters like free / paid, handicap access */}
+            <input
+              type="checkbox"
+              id="free"
+              onChange={(e) =>
+                setFilters((prev) => ({ ...prev, isFree: e.target.checked }))
+              }
+            />
+            <label htmlFor="free">Free Toilets</label>
+            <input
+              type="checkbox"
+              id="handicap"
+              onChange={(e) =>
+                setFilters((prev) => ({
+                  ...prev,
+                  hasHandicapAccess: e.target.checked,
+                }))
+              }
+            />
+            <label htmlFor="handicap">Handicap Accessible</label>
             <TextInput
               style={styles.textInput}
               placeholder="Search for toilet"
