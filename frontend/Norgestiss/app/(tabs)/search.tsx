@@ -21,6 +21,8 @@ type ToiletFilter = {
   isFree?: boolean;
   hasHandicapAccess?: boolean;
   search?: string;
+  isFreeOrPaid?: 'free' | 'paid';
+  isHandicapAccessible?: boolean;
 };
 
 export default function SearchScreen() {
@@ -64,6 +66,14 @@ export default function SearchScreen() {
               .includes(filters.search?.toLocaleLowerCase() || ''),
         );
       }
+      if (filters.isFree === true || filters.isFree === false) {
+        result = result.filter((toilet) => toilet.isFree === filters.isFree);
+      }
+      if (filters.hasHandicapAccess !== undefined) {
+        result = result.filter(
+          (toilet) => toilet.hasHandicapAccess === filters.hasHandicapAccess,
+        );
+      }
 
       return result;
     }
@@ -89,13 +99,25 @@ export default function SearchScreen() {
           <ThemedView style={styles.searchContainer}>
             {/* input for selecting filters like free / paid, handicap access */}
             <input
-              type="checkbox"
+              type="radio"
               id="free"
+              name="isFreeOrPaid"
+              value="free"
               onChange={(e) =>
                 setFilters((prev) => ({ ...prev, isFree: e.target.checked }))
               }
             />
             <label htmlFor="free">Free Toilets</label>
+            <input
+              type="radio"
+              id="paid"
+              name="isFreeOrPaid"
+              value="paid"
+              onChange={(e) =>
+                setFilters((prev) => ({ ...prev, isFree: !e.target.checked }))
+              }
+            />
+            <label htmlFor="paid">Paid Toilets</label>
             <input
               type="checkbox"
               id="handicap"
