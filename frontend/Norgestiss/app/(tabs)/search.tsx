@@ -121,6 +121,8 @@ export default function SearchScreen() {
             <input
               type="checkbox"
               id="handicap"
+              name="handicap"
+              value="true"
               onChange={(e) =>
                 setFilters((prev) => ({
                   ...prev,
