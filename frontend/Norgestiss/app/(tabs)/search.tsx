@@ -119,6 +119,16 @@ export default function SearchScreen() {
             />
             <label htmlFor="paid">Paid Toilets</label>
             <input
+              type="radio"
+              id="all"
+              name="isFreeOrPaid"
+              value="all"
+              onChange={(e) =>
+                setFilters((prev) => ({ ...prev, isFree: !e.target.checked }))
+              }
+            />
+            <label htmlFor="all">All Toilets</label>
+            <input
               type="checkbox"
               id="handicap"
               name="handicap"
@@ -130,6 +140,7 @@ export default function SearchScreen() {
                 }))
               }
             />
+
             <label htmlFor="handicap">Handicap Accessible</label>
             <TextInput
               style={styles.textInput}
