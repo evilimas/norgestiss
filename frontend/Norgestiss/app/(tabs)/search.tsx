@@ -21,7 +21,7 @@ type ToiletFilter = {
   isFree?: boolean;
   hasHandicapAccess?: boolean;
   search?: string;
-  isFreeOrPaid?: 'free' | 'paid';
+  isFreeOrPaid?: 'free' | 'paid' | 'all';
   isHandicapAccessible?: boolean;
 };
 
@@ -66,8 +66,15 @@ export default function SearchScreen() {
               .includes(filters.search?.toLocaleLowerCase() || ''),
         );
       }
-      if (filters.isFree === true || filters.isFree === false) {
-        result = result.filter((toilet) => toilet.isFree === filters.isFree);
+      // if (filters.isFree === true || filters.isFree === false) {
+      //   result = result.filter((toilet) => toilet.isFree === filters.isFree);
+      // }
+      if (filters.isFreeOrPaid === 'all') {
+        // do nothing, show all toilets
+      } else if (filters.isFreeOrPaid === 'free') {
+        result = result.filter((toilet) => toilet.isFree === true);
+      } else if (filters.isFreeOrPaid === 'paid') {
+        result = result.filter((toilet) => toilet.isFree === false);
       }
       if (filters.hasHandicapAccess !== undefined) {
         result = result.filter(
@@ -104,7 +111,7 @@ export default function SearchScreen() {
               name="isFreeOrPaid"
               value="free"
               onChange={(e) =>
-                setFilters((prev) => ({ ...prev, isFree: e.target.checked }))
+                setFilters((prev) => ({ ...prev, isFreeOrPaid: 'free' }))
               }
             />
             <label htmlFor="free">Free Toilets</label>
@@ -114,7 +121,7 @@ export default function SearchScreen() {
               name="isFreeOrPaid"
               value="paid"
               onChange={(e) =>
-                setFilters((prev) => ({ ...prev, isFree: !e.target.checked }))
+                setFilters((prev) => ({ ...prev, isFreeOrPaid: 'paid' }))
               }
             />
             <label htmlFor="paid">Paid Toilets</label>
@@ -124,7 +131,7 @@ export default function SearchScreen() {
               name="isFreeOrPaid"
               value="all"
               onChange={(e) =>
-                setFilters((prev) => ({ ...prev, isFree: !e.target.checked }))
+                setFilters((prev) => ({ ...prev, isFreeOrPaid: 'all' }))
               }
             />
             <label htmlFor="all">All Toilets</label>
