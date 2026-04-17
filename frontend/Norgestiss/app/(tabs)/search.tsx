@@ -104,7 +104,6 @@ export default function SearchScreen() {
           </ThemedText>
 
           <ThemedView style={styles.searchContainer}>
-            {/* input for selecting filters like free / paid, handicap access */}
             <input
               type="radio"
               id="free"
