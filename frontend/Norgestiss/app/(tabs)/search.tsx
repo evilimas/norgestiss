@@ -104,6 +104,16 @@ export default function SearchScreen() {
           </ThemedText>
 
           <ThemedView style={styles.searchContainer}>
+            <TextInput
+              style={styles.textInput}
+              placeholder="Search for toilet"
+              onChangeText={(text) =>
+                setFilters((prev) => ({ ...prev, search: text }))
+              }
+              value={filters.search || ''}
+            />
+          </ThemedView>
+          <ThemedView style={styles.filterContainer}>
             <input
               type="radio"
               id="free"
@@ -148,14 +158,6 @@ export default function SearchScreen() {
             />
 
             <label htmlFor="handicap">Handicap Accessible</label>
-            <TextInput
-              style={styles.textInput}
-              placeholder="Search for toilet"
-              onChangeText={(text) =>
-                setFilters((prev) => ({ ...prev, search: text }))
-              }
-              value={filters.search || ''}
-            />
           </ThemedView>
           <ThemedView style={styles.toiletList}>
             {filteredToilets.map((toilet) => (
@@ -234,5 +236,13 @@ const styles = StyleSheet.create({
     marginTop: 'auto',
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  filterContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    // alignItems: 'flex-start',
+    // alignItems: 'flex-start',
+    justifyContent: 'center',
+    // gap: 8,
   },
 });
