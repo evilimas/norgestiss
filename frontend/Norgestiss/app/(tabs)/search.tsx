@@ -114,42 +114,52 @@ export default function SearchScreen() {
             />
           </ThemedView>
           <ThemedView style={styles.filterContainer}>
-            <View style={styles.filtersContainer}>
-              <input
-                type="radio"
-                id="free"
-                name="isFreeOrPaid"
-                value="free"
-                onChange={(e) =>
-                  setFilters((prev) => ({ ...prev, isFreeOrPaid: 'free' }))
-                }
-              />
-              <label htmlFor="free">Free Toilets</label>
-            </View>
-            <View style={styles.filtersContainer}>
-              <input
-                type="radio"
-                id="paid"
-                name="isFreeOrPaid"
-                value="paid"
-                onChange={(e) =>
-                  setFilters((prev) => ({ ...prev, isFreeOrPaid: 'paid' }))
-                }
-              />
-              <label htmlFor="paid">Paid Toilets</label>
-            </View>
-            <View style={styles.filtersContainer}>
-              <input
-                type="radio"
-                id="all"
-                name="isFreeOrPaid"
-                value="all"
-                onChange={(e) =>
-                  setFilters((prev) => ({ ...prev, isFreeOrPaid: 'all' }))
-                }
-              />
-              <label htmlFor="all">All Toilets</label>
-            </View>
+            <ThemedView
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                gap: 16,
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
+              <View style={styles.filtersContainers}>
+                <input
+                  type="radio"
+                  id="free"
+                  name="isFreeOrPaid"
+                  value="free"
+                  onChange={(e) =>
+                    setFilters((prev) => ({ ...prev, isFreeOrPaid: 'free' }))
+                  }
+                />
+                <label htmlFor="free">Free Toilets</label>
+              </View>
+              <View style={styles.filtersContainers}>
+                <input
+                  type="radio"
+                  id="paid"
+                  name="isFreeOrPaid"
+                  value="paid"
+                  onChange={(e) =>
+                    setFilters((prev) => ({ ...prev, isFreeOrPaid: 'paid' }))
+                  }
+                />
+                <label htmlFor="paid">Paid Toilets</label>
+              </View>
+              <View style={styles.filtersContainers}>
+                <input
+                  type="radio"
+                  id="all"
+                  name="isFreeOrPaid"
+                  value="all"
+                  onChange={(e) =>
+                    setFilters((prev) => ({ ...prev, isFreeOrPaid: 'all' }))
+                  }
+                />
+                <label htmlFor="all">All Toilets</label>
+              </View>
+            </ThemedView>
             <View style={styles.filtersContainer}>
               <input
                 type="checkbox"
@@ -252,6 +262,13 @@ const styles = StyleSheet.create({
     // alignItems: 'flex-start',
     // justifyContent: 'center',
     // gap: 8,
+  },
+  filtersContainers: {
+    display: 'flex',
+    flexDirection: 'column-reverse',
+    // justifyContent: 'center',
+    // gap: 4,
+    // padding: 4,
   },
   filtersContainer: {
     display: 'flex',
