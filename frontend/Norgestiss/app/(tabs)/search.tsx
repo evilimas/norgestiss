@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, Text, ScrollView } from 'react-native';
+import { StyleSheet, TextInput, Text, ScrollView, View } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { getAllToilets } from '@/services/toiletServices';
@@ -114,50 +114,58 @@ export default function SearchScreen() {
             />
           </ThemedView>
           <ThemedView style={styles.filterContainer}>
-            <input
-              type="radio"
-              id="free"
-              name="isFreeOrPaid"
-              value="free"
-              onChange={(e) =>
-                setFilters((prev) => ({ ...prev, isFreeOrPaid: 'free' }))
-              }
-            />
-            <label htmlFor="free">Free Toilets</label>
-            <input
-              type="radio"
-              id="paid"
-              name="isFreeOrPaid"
-              value="paid"
-              onChange={(e) =>
-                setFilters((prev) => ({ ...prev, isFreeOrPaid: 'paid' }))
-              }
-            />
-            <label htmlFor="paid">Paid Toilets</label>
-            <input
-              type="radio"
-              id="all"
-              name="isFreeOrPaid"
-              value="all"
-              onChange={(e) =>
-                setFilters((prev) => ({ ...prev, isFreeOrPaid: 'all' }))
-              }
-            />
-            <label htmlFor="all">All Toilets</label>
-            <input
-              type="checkbox"
-              id="handicap"
-              name="handicap"
-              value="true"
-              onChange={(e) =>
-                setFilters((prev) => ({
-                  ...prev,
-                  hasHandicapAccess: e.target.checked,
-                }))
-              }
-            />
+            <View style={styles.filtersContainer}>
+              <input
+                type="radio"
+                id="free"
+                name="isFreeOrPaid"
+                value="free"
+                onChange={(e) =>
+                  setFilters((prev) => ({ ...prev, isFreeOrPaid: 'free' }))
+                }
+              />
+              <label htmlFor="free">Free Toilets</label>
+            </View>
+            <View style={styles.filtersContainer}>
+              <input
+                type="radio"
+                id="paid"
+                name="isFreeOrPaid"
+                value="paid"
+                onChange={(e) =>
+                  setFilters((prev) => ({ ...prev, isFreeOrPaid: 'paid' }))
+                }
+              />
+              <label htmlFor="paid">Paid Toilets</label>
+            </View>
+            <View style={styles.filtersContainer}>
+              <input
+                type="radio"
+                id="all"
+                name="isFreeOrPaid"
+                value="all"
+                onChange={(e) =>
+                  setFilters((prev) => ({ ...prev, isFreeOrPaid: 'all' }))
+                }
+              />
+              <label htmlFor="all">All Toilets</label>
+            </View>
+            <View style={styles.filtersContainer}>
+              <input
+                type="checkbox"
+                id="handicap"
+                name="handicap"
+                value="true"
+                onChange={(e) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    hasHandicapAccess: e.target.checked,
+                  }))
+                }
+              />
 
-            <label htmlFor="handicap">Handicap Accessible</label>
+              <label htmlFor="handicap">Handicap Accessible</label>
+            </View>
           </ThemedView>
           <ThemedView style={styles.toiletList}>
             {filteredToilets.map((toilet) => (
@@ -239,10 +247,14 @@ const styles = StyleSheet.create({
   },
   filterContainer: {
     display: 'flex',
-    flexDirection: 'column',
+    // flexDirection: 'column',
     // alignItems: 'flex-start',
     // alignItems: 'flex-start',
-    justifyContent: 'center',
+    // justifyContent: 'center',
     // gap: 8,
+  },
+  filtersContainer: {
+    display: 'flex',
+    flexDirection: 'row',
   },
 });
