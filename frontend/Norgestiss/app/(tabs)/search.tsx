@@ -1,4 +1,11 @@
-import { StyleSheet, TextInput, Text, ScrollView, View } from 'react-native';
+import {
+  StyleSheet,
+  TextInput,
+  Text,
+  ScrollView,
+  View,
+  Pressable,
+} from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { getAllToilets } from '@/services/toiletServices';
@@ -114,68 +121,48 @@ export default function SearchScreen() {
             />
           </ThemedView>
           <ThemedView style={styles.filterContainer}>
-            <ThemedView
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                gap: 16,
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
-            >
-              <View style={styles.filtersContainers}>
-                <input
-                  type="radio"
-                  id="free"
-                  name="isFreeOrPaid"
-                  value="free"
-                  onChange={(e) =>
-                    setFilters((prev) => ({ ...prev, isFreeOrPaid: 'free' }))
+            <View style={styles.radioInputs}>
+              {(['free', 'paid', 'all'] as const).map((value) => (
+                <Pressable
+                  key={value}
+                  style={styles.radio}
+                  onPress={() =>
+                    setFilters((prev) => ({ ...prev, isFreeOrPaid: value }))
                   }
-                />
-                <label htmlFor="free">Free Toilets</label>
-              </View>
-              <View style={styles.filtersContainers}>
-                <input
-                  type="radio"
-                  id="paid"
-                  name="isFreeOrPaid"
-                  value="paid"
-                  onChange={(e) =>
-                    setFilters((prev) => ({ ...prev, isFreeOrPaid: 'paid' }))
-                  }
-                />
-                <label htmlFor="paid">Paid Toilets</label>
-              </View>
-              <View style={styles.filtersContainers}>
-                <input
-                  type="radio"
-                  id="all"
-                  name="isFreeOrPaid"
-                  value="all"
-                  onChange={(e) =>
-                    setFilters((prev) => ({ ...prev, isFreeOrPaid: 'all' }))
-                  }
-                />
-                <label htmlFor="all">All Toilets</label>
-              </View>
-            </ThemedView>
-            <View style={styles.filtersContainer}>
-              <input
-                type="checkbox"
-                id="handicap"
-                name="handicap"
-                value="true"
-                onChange={(e) =>
-                  setFilters((prev) => ({
-                    ...prev,
-                    hasHandicapAccess: e.target.checked,
-                  }))
-                }
-              />
-
-              <label htmlFor="handicap">Handicap Accessible</label>
+                >
+                  <Text
+                    style={[
+                      styles.radioName,
+                      filters.isFreeOrPaid === value &&
+                        styles.radioNameSelected,
+                    ]}
+                  >
+                    {value === 'free'
+                      ? 'Free'
+                      : value === 'paid'
+                        ? 'Paid'
+                        : 'All Toilets'}
+                  </Text>
+                </Pressable>
+              ))}
             </View>
+            <Pressable
+              style={styles.filtersContainer}
+              onPress={() =>
+                setFilters((prev) => ({
+                  ...prev,
+                  hasHandicapAccess: prev.hasHandicapAccess ? undefined : true,
+                }))
+              }
+            >
+              <View
+                style={[
+                  styles.checkbox,
+                  filters.hasHandicapAccess && styles.checkboxChecked,
+                ]}
+              />
+              <Text style={styles.checkboxLabel}>Handicap Accessible</Text>
+            </Pressable>
           </ThemedView>
           <ThemedView style={styles.toiletList}>
             {filteredToilets.map((toilet) => (
@@ -256,22 +243,53 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   filterContainer: {
-    display: 'flex',
-    // flexDirection: 'column',
-    // alignItems: 'flex-start',
-    // alignItems: 'flex-start',
-    // justifyContent: 'center',
-    // gap: 8,
-  },
-  filtersContainers: {
-    display: 'flex',
-    flexDirection: 'column-reverse',
-    // justifyContent: 'center',
-    // gap: 4,
-    // padding: 4,
+    gap: 8,
   },
   filtersContainer: {
-    display: 'flex',
     flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: 4,
+  },
+  radioInputs: {
+    width: '100%',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    borderRadius: 8,
+    backgroundColor: '#EEE',
+    padding: 4,
+    // width: 300,
+  },
+  radio: {
+    flex: 1,
+    textAlign: 'center',
+  },
+  radioName: {
+    textAlign: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+    paddingVertical: 8,
+    fontSize: 14,
+    color: 'rgba(51, 65, 85, 1)',
+  },
+  radioNameSelected: {
+    backgroundColor: '#fff',
+    fontWeight: '600',
+  },
+  checkbox: {
+    width: 18,
+    height: 18,
+    borderRadius: 4,
+    borderWidth: 2,
+    borderColor: 'gray',
+  },
+  checkboxChecked: {
+    backgroundColor: '#4A90E2',
+    borderColor: '#4A90E2',
+  },
+  checkboxLabel: {
+    fontSize: 14,
+    color: 'rgba(51, 65, 85, 1)',
   },
 });
