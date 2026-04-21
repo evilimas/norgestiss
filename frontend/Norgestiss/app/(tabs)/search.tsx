@@ -35,7 +35,10 @@ type ToiletFilter = {
 export default function SearchScreen() {
   const [toilets, setToilets] = useState<Toilet[]>([]);
   const [filteredToilets, setFilteredToilets] = useState<Toilet[]>([]);
-  const [filters, setFilters] = useState<ToiletFilter>({});
+  const [filters, setFilters] = useState<ToiletFilter>({
+    isFreeOrPaid: 'all',
+    hasHandicapAccess: true,
+  });
 
   useEffect(() => {
     getAllToilets().then(setToilets);
