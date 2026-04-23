@@ -76,9 +76,6 @@ export default function SearchScreen() {
               .includes(filters.search?.toLocaleLowerCase() || ''),
         );
       }
-      // if (filters.isFree === true || filters.isFree === false) {
-      //   result = result.filter((toilet) => toilet.isFree === filters.isFree);
-      // }
       if (filters.isFreeOrPaid === 'all') {
         // do nothing, show all toilets
       } else if (filters.isFreeOrPaid === 'free') {
