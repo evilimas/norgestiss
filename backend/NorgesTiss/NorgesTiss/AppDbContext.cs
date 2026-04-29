@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NorgesTiss.Model;
 
 namespace NorgesTiss;
 

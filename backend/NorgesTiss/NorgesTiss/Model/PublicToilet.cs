@@ -1,13 +1,15 @@
-﻿public class PublicToilet
+﻿namespace NorgesTiss.Model;
+
+public class PublicToilet
 {
-    public int Id { get; set; } 
+    public int Id { get; init; } 
     
-    public string Name { get; set; }
-    public double Latitude { get; set; }  
-    public double Longitude { get; set; }
-    public string Adress { get; set; }
+    public string Name { get; init; }
+    public double Latitude { get; init; }  
+    public double Longitude { get; init; }
+    public string Adress { get; init; }
     
-    public bool IsFree { get; set; } 
-    public bool HasHandicapAccess { get; set; }
-    public string Description { get; set; }
+    public bool IsFree { get; init; } 
+    public bool HasHandicapAccess { get; init; }
+    public string Description { get; init; }
 }
