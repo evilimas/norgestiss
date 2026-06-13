@@ -203,7 +203,6 @@ const styles = StyleSheet.create({
     marginTop: 16,
     padding: 16,
     borderRadius: 12,
-    // backgroundColor: 'rgba(0, 0, 0, 0.05)',
     gap: 12,
   },
 });
